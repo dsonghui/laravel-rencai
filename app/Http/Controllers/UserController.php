@@ -10,12 +10,6 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:api')->except(
-            ['index', 'show', 'activities', 'activate', 'followers', 'followings', 'updateEmail', 'exists']
-        );
-    }
 
     public function index(Request $request)
     {
@@ -69,7 +63,6 @@ class UserController extends Controller
     }
 
 
-
     public function sendActiveMail(Request $request)
     {
         $request->user()->sendActiveMail();
@@ -100,17 +93,15 @@ class UserController extends Controller
 
             $user->update(['email' => $request->get('email')]);
 
-            return redirect(config('app.site_url').'?active-success=yes&type=email');
+            return redirect(config('app.site_url') . '?active-success=yes&type=email');
         }
 
-        return redirect(config('app.site_url').'?active-success=no&type=email');
+        return redirect(config('app.site_url') . '?active-success=no&type=email');
     }
 
     /**
      * Display the specified resource.
-     *
      * @param \App\User $user
-     *
      * @return \App\Http\Resources\UserResource
      */
     public function show(User $user)
@@ -120,12 +111,9 @@ class UserController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
      * @param \Illuminate\Http\Request $request
-     * @param \App\User                $user
-     *
+     * @param \App\User $user
      * @return \App\Http\Resources\UserResource
-     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(Request $request, User $user)

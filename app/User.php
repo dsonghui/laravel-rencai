@@ -10,14 +10,14 @@ use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, Notifiable,  WithDiffForHumanTimes;
+    use HasApiTokens, Notifiable, WithDiffForHumanTimes;
 
     /**
      * The attributes that are mass assignable.
      * @var array
      */
     protected $fillable = [
-        'name','email', 'password', 'phone',
+        'name', 'password', 'phone',
         'is_admin', 'cache',
         'last_active_at', 'banned_at', 'activated_at',
     ];
@@ -27,11 +27,14 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'phone',
+        'password', 'remember_token',
     ];
 
+    const SENSITIVE_FIELDS = [
+        'last_active_at', 'banned_at', 'phone',
+    ];
     const UPDATE_SENSITIVE_FIELDS = [
-        'last_active_at', 'banned_at',
+        'activated_at', 'banned_at',
     ];
 
     public static function boot()
@@ -63,9 +66,7 @@ class User extends Authenticatable
 
     /**
      * Find the user identified by the given $identifier.
-     *
      * @param $identifier email|phone
-     *
      * @return mixed
      */
     public function findForPassport($identifier)
@@ -76,5 +77,15 @@ class User extends Authenticatable
     public static function isUsernameExists(string $username)
     {
         return self::whereRaw(\sprintf('lower(name) = "%s" ', \strtolower($username)))->exists();
+    }
+
+    public function company()
+    {
+        return $this->hasOne(Company::class, 'user_id', 'id');
+    }
+
+    public function talent()
+    {
+        return $this->hasOne(Talent::class, 'user_id', 'id');
     }
 }

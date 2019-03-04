@@ -34,9 +34,7 @@ class AuthController extends Controller
 
     public function reset(Request $request)
     {
-        return $request->get('email') ?
-            $this->resetPasswordByToken($request) :
-            $this->resetPassword($request);
+        $this-> resetPassword($request);
     }
 
     public function resetPassword(Request $request)
@@ -57,29 +55,6 @@ class AuthController extends Controller
         return response()->json();
     }
 
-    public function resetPasswordByToken(Request $request)
-    {
-        $this->validate($request, [
-            'token'    => 'required',
-            'email'    => 'required|email',
-            'password' => 'required|confirmed|min:6',
-        ]);
-
-        $this->broker()->reset(
-            $this->credentials($request), function ($user, $password) {
-            $user->password = Hash::make($password);
-
-            $user->setRememberToken(Str::random(60));
-
-            $user->save();
-
-            event(new PasswordReset($user));
-        }
-        );
-
-        return response()->json();
-    }
-
     /**
      * Get the password reset credentials from the request.
      * @param \Illuminate\Http\Request $request
@@ -92,18 +67,6 @@ class AuthController extends Controller
         );
     }
 
-    public function forgetPassword(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email|exists:users,email',
-        ]);
-
-        $this->broker()->sendResetLink(
-            $request->only('email')
-        );
-
-        return response()->json();
-    }
 
     public function broker()
     {

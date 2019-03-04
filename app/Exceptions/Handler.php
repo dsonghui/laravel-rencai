@@ -43,22 +43,6 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if ($request->is("api/*")) {
-            if ($exception instanceof ValidationException) {
-                $result = [
-                    "code" => 422,
-                    "msg"  => array_values($exception->errors())[0][0],
-                    "data" => ""
-                ];
-                return response()->json($result);
-            }
-            //$result = [
-            //    "code" => $exception->getCode(),
-            //    "msg"  => $exception->getMessage(),
-            //    "data" => "",
-            //];
-            //return response()->json($result);
-        }
         return parent::render($request, $exception);
     }
 }
