@@ -11,6 +11,7 @@ trait DatabaseTransactions
     {
         parent::setUp();
         DB::beginTransaction();
+
     }
 
     public function tearDown() {
