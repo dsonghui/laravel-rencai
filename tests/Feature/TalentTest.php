@@ -2,58 +2,59 @@
 
 namespace Tests\Feature;
 
-use App\Company;
+use App\Talent;
 use App\User;
+use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\UserLoginAndDBTransactions;
 
-class CompanyTest extends TestCase
+class TalentTest extends TestCase
 {
 
     use UserLoginAndDBTransactions;
 
 
-    public function testCreateCompany()
+    public function testCreateTalent()
     {
-        $response = $this->json('POST', '/api/company', [
-            'name' => 'AutoTestCompany'
+        $response = $this->json('POST', '/api/talent', [
+            'name' => 'AutoTestTalent'
         ], [
             "Authorization" => "Bearer " . $this->access_token
         ]);
         $response->assertStatus(200);
 
-        $result = Company::where('name', 'AutoTestCompany')->first();
+        $result = Talent::where('name', 'AutoTestTalent')->first();
         $this->assertNotEmpty($result);
 
-        $result = Company::where('name', 'AutoTestCompany999')->first();
+        $result = Talent::where('name', 'AutoTestTalent999')->first();
         $this->assertEmpty($result);
 
     }
 
-    public function testGetCompany()
+    public function testGetTalent()
     {
-        $result = Company::first();
-        $response = $this->json('Get', '/api/company/' . $result->id, [], [
+        $result = Talent::first();
+        $response = $this->json('Get', '/api/talent/' . $result->id, [], [
             "Authorization" => "Bearer " . $this->access_token
         ]);
         $response->assertStatus(200);
         $this->assertEquals($response->json()['id'], $result->id);
     }
 
-    public function testUpdateCompany()
+    public function testUpdateTalent()
     {
-        $result = Company::first();
-        $response = $this->json('Put', '/api/company/' . $result->id, [
+        $result = Talent::first();
+        $response = $this->json('Put', '/api/talent/' . $result->id, [
             'name' => $result->name,
-            'shortname' => 'new shortname'
+            'birthday' => Carbon::now()->toDateString()
         ], [
             "Authorization" => "Bearer " . $this->access_token
         ]);
         $response->assertStatus(200);
-        $result2 = Company::where('id', $result->id)->first();
-        $this->assertEquals($result2->shortname, 'new shortname');
+        $result2 = Talent::where('id', $result->id)->first();
+        $this->assertEquals($result2->birthday, Carbon::now()->toDateString());
         $this->assertEquals($result->name, $result2->name);
     }
 }
