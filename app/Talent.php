@@ -32,4 +32,10 @@ class Talent extends Model
     {
         return self::where('user_id', $user_id)->exists();
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }

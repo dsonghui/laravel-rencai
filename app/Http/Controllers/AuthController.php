@@ -26,7 +26,7 @@ class AuthController extends Controller
             'password' => bcrypt($request->get('password')),
         ]);
 
-        $token = $user->createToken('Laravel Password Grant Client')->accessToken;
+        $token = $user->createToken('pc Client')->accessToken;
 
         return response()->json([
             'token' => $token,

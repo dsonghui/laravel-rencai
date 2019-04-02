@@ -56,4 +56,11 @@ class CompanyTest extends TestCase
         $this->assertEquals($result2->shortname, 'new shortname');
         $this->assertEquals($result->name, $result2->name);
     }
+
+
+    public function testHasOneUser()
+    {
+        $result = Company::with('user')->first();
+        $this->assertIsInt($result->user->id);
+    }
 }

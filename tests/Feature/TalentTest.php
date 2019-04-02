@@ -57,4 +57,12 @@ class TalentTest extends TestCase
         $this->assertEquals($result2->birthday, Carbon::now()->toDateString());
         $this->assertEquals($result->name, $result2->name);
     }
+
+
+    public function testHasOneUser()
+    {
+        $result = Talent::with('user')->first();
+        $this->assertIsInt($result->user->id);
+    }
+
 }
