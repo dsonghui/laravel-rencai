@@ -15,14 +15,14 @@ class CreateJobsTable extends Migration
         Schema::create('jobs', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('company_id');
-            $table->string('type')->comment('招聘类型');
+            $table->string('type')->comment('招聘类型 默认企业招聘 微信招聘 ')->default('company');
             $table->string('title')->comment('职位标题');
             $table->string('desc')->comment('职位描述');
             $table->string('position')->comment('职位类别');
-            $table->string('job_type')->comment('职位类型(全职,兼职)');
+            $table->string('job_type')->comment('职位类型(全职,兼职)')->default('全职');
             $table->string('job_person_no')->nullable()->comment('招聘人数');
             $table->string('job_address')->comment('工作地点');
-            $table->string('job_salary')->comment('工作薪资');
+            $table->string('job_salary')->comment('工作薪资')->defalut('面议');
 
             $table->string('work_years')->nullable()->comment('工作年限');
             $table->string('work_edu')->nullable()->comment('学历要求');

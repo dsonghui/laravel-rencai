@@ -14,6 +14,6 @@ Route::middleware('auth:api')->group(function () {
 
 });
 
-
 Route::apiResource('company', 'CompanyController', ['only'=>['index','show','update','store']]);
 Route::apiResource('talent', 'TalentController', ['only'=>['index','show','update','store']]);
+Route::apiResource('job', 'JobController', ['only'=>['index','show','update','store']]);

@@ -53,7 +53,7 @@ class User extends Authenticatable
             }
 
             if (\array_has($user->getDirty(), self::UPDATE_SENSITIVE_FIELDS) && !\request()->user()->is_admin) {
-                abort('非法请求！');
+                abort(400, '非法请求！');
             }
 
             foreach ($user->getDirty() as $field => $value) {

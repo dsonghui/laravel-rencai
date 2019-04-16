@@ -2,6 +2,7 @@
 
 use App\Company;
 use App\User;
+use App\Job;
 use Illuminate\Database\Seeder;
 
 class UsersTableSeeder extends Seeder
@@ -18,22 +19,25 @@ class UsersTableSeeder extends Seeder
 
     protected function createCompanyUser()
     {
-        $company = Company::create([
-            'user_id'   => 0,
-            'name'      => '测试企业名称1',
-            'shortname' => '测试企业名称1',
-        ]);
-        $user = User::create(['name' => 'company', 'password' => bcrypt('123456'), 'phone' => '1344446' . rand(1000, 9999)]);
-        $user->company()->save($company);
+        factory(User::class, 10)->create()->each(function ($user) {
+            $user->is_company = 1;
+            $user->save();
+            $user->company()->save(factory(Company::class)->make());
+            $job = factory(Job::class)->make();
+            $job->company_id = $user->company->id;
+            $user->company->jobs()->save($job);
+        });
+
     }
 
     protected function createTalentUser()
     {
-        $talent = \App\Talent::create([
-            'user_id' => 0,
-            'name'    => '邓先生'
-        ]);
-        $user = User::create(['name' => 'talent', 'password' => bcrypt('123456'), 'phone' => '1344446' . rand(1000, 9999)]);
-        $user->talent()->save($talent);
+        factory(User::class, 10)->create()->each(function ($user) {
+            $user->talent()->save(factory(\App\Talent::class)->make());
+            // 增加简历;
+            //$job = factory(Job::class)->make();
+            //$job->company_id = $user->company->id;
+            //$user->company->jobs()->save($job);
+        });
     }
 }

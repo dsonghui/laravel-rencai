@@ -26,7 +26,7 @@ class AuthController extends Controller
             'password' => bcrypt($request->get('password')),
         ]);
 
-        $token = $user->createToken('pc Client')->accessToken;
+        $token = $user->createToken('Created register Token')->accessToken;
 
         return response()->json([
             'token' => $token,
