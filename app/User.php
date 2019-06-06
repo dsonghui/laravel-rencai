@@ -2,7 +2,10 @@
 
 namespace App;
 
+use function abort;
 use App\Traits\WithDiffForHumanTimes;
+use function array_has;
+use function ends_with;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
@@ -43,7 +46,7 @@ class User extends Authenticatable
 
         static::creating(function ($user) {
             if (User::isUsernameExists($user->name)) {
-                \abort(400, '用户名已经存在');
+                abort(400, '用户名已经存在');
             }
         });
 
@@ -52,12 +55,12 @@ class User extends Authenticatable
                 $user->password = \bcrypt($user->password);
             }
 
-            if (\array_has($user->getDirty(), self::UPDATE_SENSITIVE_FIELDS) && !\request()->user()->is_admin) {
+            if (array_has($user->getDirty(), self::UPDATE_SENSITIVE_FIELDS) && !\request()->user()->is_admin) {
                 abort(400, '非法请求！');
             }
 
             foreach ($user->getDirty() as $field => $value) {
-                if (\ends_with($field, '_at')) {
+                if (ends_with($field, '_at')) {
                     $user->$field = $value ? now() : null;
                 }
             }

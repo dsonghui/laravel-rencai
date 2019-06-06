@@ -16,9 +16,8 @@ class Company extends Model
         'pr', 'mun',
         'provinceid', 'cityid', 'three_cityid',
         'address', 'linkman', 'linkphone', 'linkmail',
-        'lat', 'lnt'
+        'lat', 'lnt',
     ];
-
 
     public static function boot()
     {
@@ -26,7 +25,7 @@ class Company extends Model
 
         static::creating(function ($company) {
             if (Company::isHasCompany($company->user_id)) {
-                \abort(400, '用户已存在关联的企业');
+                abort(400, '用户已存在关联的企业');
             }
         });
     }
