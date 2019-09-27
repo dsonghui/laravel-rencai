@@ -38,19 +38,19 @@ class ImportJob extends Command
      */
     public function handle()
     {
+        // TODO 
         set_time_limit(0);
-        $id = Cache::get('last_company_id', 0);
         $id = Cache::get('last_company_id', 0);
         $this->info('开始导入企业=> 企业最小ID为:' . $id);
         $companys = QianLiCompany::where('c_info_lmt', '>', '2017-00-01 00:00:00')
             ->where('c_approval', 1)
             ->where('company_info_id', '>', $id)
             ->orderBy('company_info_id', 'asc')
-            ->limit(1000)
+            ->limit(100)
             ->get();
         $companys->each(function ($company) {
-            Cache::put('last_company_id', $company->company_info_id, 100000);
             $this->importCompany($company);
+            Cache::put('last_company_id', $company->company_info_id, 100000);
         });
         $this->info('导入结束');
     }
@@ -215,6 +215,7 @@ class ImportJob extends Command
 
         $option = [
             'http_errors' => false,
+            'timeout'     => 10,
             'form_params' => $postCompany
         ];
 
