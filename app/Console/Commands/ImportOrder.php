@@ -29,7 +29,34 @@ class ImportOrder extends Command
         $faker = Factory::create('zh_CN');
         // TODO
         set_time_limit(0);
+        $this->totalPrice();
+        return;
+        $time = 150;
+        $num = 0;
+        for ($j = 0; $j < $time; ++$j) {
+            for ($i = 0; $i < $time; ++$i) {
+                $num++;
+                dump('开始生成订单数据：' . $num);
+                $this->mockOneOrder();
+                dump('--完成');
+            }
+            dump('完成一次');
+            $this->totalPrice();
+            sleep(1);
+        }
+        $this->totalPrice();
+        //dump($u->toJson());
+        //echo $faker->ipv4;
+    }
 
+    public function totalPrice()
+    {
+        $result = YlfOrder::where(['pay_status' => 2])->sum('goods_amount');
+        dump('总交易额为；' . $result);
+    }
+
+    public function mockOneOrder()
+    {
         $user = $this->createUser();
         $address = $this->createUserAddress($user);
         $goods = $this->createGoods($user);
@@ -38,8 +65,6 @@ class ImportOrder extends Command
             $good->order_id = $order->order_id;
             $good->save();
         });
-        //dump($u->toJson());
-        //echo $faker->ipv4;
     }
 
     public function createUser($phone = null, $reg_time = null, $nick_name = '')
@@ -75,6 +100,7 @@ class ImportOrder extends Command
                 $order_goods->push(YlfOrderGoods::MockOrderGoods($good3, $user));
             }
         }
+
         return $order_goods;
     }
 

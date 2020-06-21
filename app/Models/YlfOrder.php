@@ -110,7 +110,7 @@ class YlfOrder extends Model
             'supplier_id' => 0,
             'froms' => 'pc',
             'coupons' => '0.00',
-            'uc_id' => 1,
+            'uc_id' => 1, // 标记
             'is_zc_order' => 0,
             'zc_goods_id' => 0,
             'is_frozen' => 0,
